@@ -8,6 +8,18 @@ QA api server 실행
 opyrator launch-api app:question_answering
 ```
 
+### request
+
+model_name: 사용할 finetuned model 이름 (mbert, koelectra)
+
+context: 해당하는 paragraph
+
+question: 질문
+
+### response
+
+answer: 답변
+
 ## Build QA data with train dataset
 
 finetune에 사용한 train data의 결과를 json에 저장
