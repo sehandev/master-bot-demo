@@ -1,10 +1,11 @@
 from pydantic import BaseModel, Field
 from transformers import pipeline
-
 from opyrator.components import outputs
 
-MODEL_NAME = "songhee/i-manual-mbert"
-mbert = pipeline("question-answering", model=MODEL_NAME, tokenizer=MODEL_NAME)
+from util import QuestionAnswering
+
+mbert = QuestionAnswering("songhee/i-manual-mbert")
+koelectra = QuestionAnswering("mtr0930/koelectra-base-v3_epoch-10")
 
 
 class QuestionAnsweringInput(BaseModel):
@@ -33,19 +34,13 @@ def question_answering(input: QuestionAnsweringInput) -> outputs.ClassificationO
     model_name = input.model_name.lower()
     if model_name == 'mbert'.lower():
         results = mbert(
-            {
-                "question": input.question,
-                "context": input.context,
-            },
-            topk=1,
+            context=input.context,
+            question=input.question,
         )
     elif model_name == 'koelectra'.lower():
-        results = mbert(
-            {
-                "question": input.question,
-                "context": input.context,
-            },
-            topk=1,
+        results = koelectra(
+            context=input.context,
+            question=input.question,
         )
 
     results = [results]
@@ -54,7 +49,7 @@ def question_answering(input: QuestionAnsweringInput) -> outputs.ClassificationO
         __root__=[
             outputs.ScoredLabel(
                 label=result["answer"],
-                score=result["score"],
+                score=0,
             )
             for result in results
         ]

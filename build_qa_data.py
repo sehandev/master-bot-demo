@@ -4,10 +4,12 @@ import argparse
 from tqdm import tqdm
 from transformers import pipeline
 
+from util import QuestionAnswering
+
 
 MODEL_DICT = {
     'mbert': 'songhee/i-manual-mbert',
-    'koelectra': 'sehandev/koelectra-long-qa',
+    'koelectra': 'mtr0930/koelectra-base-v3_epoch-10',
 }
 
 
@@ -21,7 +23,7 @@ def load_data():
 
 def save_result(model_name: str, result: dict):
     # Prod
-    with open(f'./data/{model_name}.json', 'w', encoding='UTF-8') as result_file:
+    with open(f'./front/public/{model_name}.json', 'w', encoding='UTF-8') as result_file:
         result_file.write(json.dumps(result, ensure_ascii=False))
 
     # Dev
@@ -30,12 +32,10 @@ def save_result(model_name: str, result: dict):
 
 
 def answer_data(nlp, data):
-    result_list = []
+    result_dict = {}
     for article in tqdm(data):
-        result = {
-            'title': article['title'],
-            'contents': [],
-        }
+        title = article['title']
+        result_dict[title] = []
 
         for paragraph in article['paragraphs']:
             context = paragraph['context']
@@ -55,15 +55,14 @@ def answer_data(nlp, data):
                     'answer': answer,
                 })
 
-            result['contents'].append(content)
+            result_dict[title].append(content)
 
-        result_list.append(result)
-
-    return result_list
+    return result_dict
 
 
 def main(model_name):
-    nlp = pipeline('question-answering', model=MODEL_DICT[model_name], tokenizer=MODEL_DICT[model_name], device=0)
+    # nlp = pipeline('question-answering', model=MODEL_DICT[model_name], tokenizer=MODEL_DICT[model_name], device=0)
+    nlp = QuestionAnswering(MODEL_DICT[model_name])
     data = load_data()
 
     result = answer_data(nlp, data)
