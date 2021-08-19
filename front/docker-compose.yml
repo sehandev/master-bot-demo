@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  prod:
+    image: node:16-slim
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    ports:
+      - 61241:3000
+    environment:
+      - TZ=Asia/Seoul
+      - DEBIAN_FRONTEND=noninteractive
+    stdin_open: true
