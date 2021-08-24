@@ -75,8 +75,6 @@ export const Demo: React.FC<Props> = ({ model_name }) => {
                     <div className="min-w-full px-2 sm:px-4 lg:px-6">
                         <div className="relative flex items-center py-2">
                             <div className="flex space-x-4">
-                                <h2 className="mr-2 py-1 text-black">Context</h2>
-
                                 {contents && contents.map((content, idx) => {
                                     return (
                                         <button
@@ -107,6 +105,8 @@ export const Demo: React.FC<Props> = ({ model_name }) => {
 
     return (
         <div className="max-w-5xl">
+            <div className="flex mb-4 text-lg font-bold text-center">{decoded_title}</div>
+
             <ContextNav />
 
             <div className="flex flex-col">
@@ -126,18 +126,16 @@ export const Demo: React.FC<Props> = ({ model_name }) => {
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     {qa_array.map((qa, idx) => {
-                                        if (qa.answer) {
-                                            return (
-                                                <tr key={idx}>
-                                                    <td className="w-1/3 px-4 py-4">
-                                                        <div className="text-sm text-gray-900">{qa.question}</div>
-                                                    </td>
-                                                    <td className="w-2/3 px-4 py-4">
-                                                        <div className="text-sm text-gray-900">{qa.answer}</div>
-                                                    </td>
-                                                </tr>
-                                            )
-                                        }
+                                        return (
+                                            <tr key={idx}>
+                                                <td className="w-1/3 px-4 py-4">
+                                                    <div className="text-sm text-gray-900">{qa.question}</div>
+                                                </td>
+                                                <td className="w-2/3 px-4 py-4">
+                                                    <div className="text-sm text-gray-900">{qa.answer}</div>
+                                                </td>
+                                            </tr>
+                                        )
                                     })}
 
                                     {/* 실시간 QA */}
