@@ -18,7 +18,7 @@ services:
       - .:/workspace
     working_dir: /workspace
     ports:
-      - 8125:8080
+      - 8126:8080
     deploy:
       resources:
         reservations:

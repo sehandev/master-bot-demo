@@ -53,7 +53,7 @@ export const Demo: React.FC<Props> = ({ model_name }) => {
             question: question,
         })
 
-        axios.post('http://223.194.70.78:8125/call', json, {
+        axios.post('http://223.194.70.78:8126/call', json, {
             headers: {
                 'Content-Type': 'application/json'
             },
