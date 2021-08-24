@@ -1,2 +1,2 @@
-opyrator
-transformers
+opyrator==0.0.12
+transformers==4.9.2

@@ -1,0 +1,34 @@
+version: "3.9"
+services:
+  front:
+    image: node:16-slim
+    volumes:
+      - ./front:/workspace
+    working_dir: /workspace
+    ports:
+      - 61241:3000
+    stdin_open: true
+    command: >
+      bash -c "yarn
+      && yarn build
+      && yarn start"
+  dev:
+    image: sehandev/lambda-stack:20.04
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    ports:
+      - 8125:8080
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    stdin_open: true
+    command: >
+      bash -c "pip install -r requirements.txt
+      && python build_qa_data.py --model mbert
+      && python build_qa_data.py --model koelectra
+      && opyrator launch-api app:question_answering"
