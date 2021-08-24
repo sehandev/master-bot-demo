@@ -9,7 +9,7 @@ from util import QuestionAnswering
 
 MODEL_DICT = {
     'mbert': 'songhee/i-manual-mbert',
-    'koelectra': 'mtr0930/koelectra-base-v3_epoch-10',
+    'koelectra': 'mtr0930/koelectra-base-v3_epoch-100',
 }
 
 
@@ -52,7 +52,7 @@ def answer_data(nlp, data):
                 content['qas'].append({
                     'id': qa['id'],
                     'question': question,
-                    'answer': answer,
+                    'answer': answer.replace('[UNK]', '...'),
                 })
 
             result_dict[title].append(content)
@@ -61,7 +61,6 @@ def answer_data(nlp, data):
 
 
 def main(model_name):
-    # nlp = pipeline('question-answering', model=MODEL_DICT[model_name], tokenizer=MODEL_DICT[model_name], device=0)
     nlp = QuestionAnswering(MODEL_DICT[model_name])
     data = load_data()
 

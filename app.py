@@ -5,7 +5,7 @@ from opyrator.components import outputs
 from util import QuestionAnswering
 
 mbert = QuestionAnswering("songhee/i-manual-mbert")
-koelectra = QuestionAnswering("mtr0930/koelectra-base-v3_epoch-10")
+koelectra = QuestionAnswering("mtr0930/koelectra-base-v3_epoch-100")
 
 
 class QuestionAnsweringInput(BaseModel):
@@ -48,7 +48,7 @@ def question_answering(input: QuestionAnsweringInput) -> outputs.ClassificationO
     return outputs.ClassificationOutput(
         __root__=[
             outputs.ScoredLabel(
-                label=result["answer"],
+                label=result["answer"].replace('[UNK]', '...'),
                 score=0,
             )
             for result in results
