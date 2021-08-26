@@ -1,18 +1,6 @@
 version: "3.9"
 services:
-  front:
-    image: node:16-slim
-    volumes:
-      - ./front:/workspace
-    working_dir: /workspace
-    ports:
-      - 61241:3000
-    stdin_open: true
-    command: >
-      bash -c "yarn
-      && yarn build
-      && yarn start"
-  dev:
+  back:
     image: sehandev/lambda-stack:20.04
     volumes:
       - .:/workspace
@@ -32,3 +20,15 @@ services:
       && python build_qa_data.py --model mbert
       && python build_qa_data.py --model koelectra
       && opyrator launch-api app:question_answering"
+  front:
+    image: node:16-slim
+    volumes:
+      - ./front:/workspace
+    working_dir: /workspace
+    ports:
+      - 61241:3000
+    stdin_open: true
+    command: >
+      bash -c "yarn
+      && yarn build
+      && yarn start"
