@@ -1,11 +1,24 @@
+# Standard
+import json
+from pathlib import Path
+
+# PIP
 from pydantic import BaseModel, Field
 from transformers import pipeline
 from opyrator.components import outputs
 
+# Custom
 from util import QuestionAnswering
+from tfidf import Tfidf_QA_Module
+
+PROJECT_DIR = Path(__file__).parent.absolute()
 
 mbert = QuestionAnswering("songhee/i-manual-mbert")
 koelectra = QuestionAnswering("mtr0930/koelectra-base-v3_epoch-100")
+tfidf_module = Tfidf_QA_Module("mtr0930/i-manual_tokenizer_updated")
+
+with open(PROJECT_DIR / "data/tfidf.json", "r", encoding="utf-8") as reader:
+    tfidf_contexts = json.load(reader)["data"]
 
 
 class QuestionAnsweringInput(BaseModel):
@@ -37,18 +50,27 @@ def question_answering(input: QuestionAnsweringInput) -> outputs.ClassificationO
             context=input.context,
             question=input.question,
         )
+        context = input.context
+        answer = results["answer"]
     elif model_name == 'koelectra'.lower():
         results = koelectra(
             context=input.context,
             question=input.question,
         )
+        context = input.context
+        answer = results["answer"]
+    elif model_name == 'tfidf'.lower():
+        answer, context = tfidf_module.get_answer(
+            dataset=tfidf_contexts,
+            question=input.question,
+        )
 
-    results = [results]
+    results = [answer, context]
 
     return outputs.ClassificationOutput(
         __root__=[
             outputs.ScoredLabel(
-                label=result["answer"].replace('[UNK]', '...'),
+                label=result.replace('[UNK]', '...'),
                 score=0,
             )
             for result in results
