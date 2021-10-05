@@ -34,7 +34,7 @@ export const FullDemo: React.FC = () => {
         }).then((response: AxiosResponse) => {
             const answer = response.data[0].label
             const context = response.data[1].label
-            set_qa_array(oldArray => [...oldArray, { question: question, context: context, answer: answer }])
+            set_qa_array(oldArray => [{ question: question, context: context, answer: answer }, ...oldArray])
         }).catch(function (error) {
             console.log(error)
         })
@@ -65,21 +65,6 @@ export const FullDemo: React.FC = () => {
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    {qa_array.map((qa, idx) => {
-                                        return (
-                                            <tr key={idx}>
-                                                <td className="w-1/6 px-4 py-4">
-                                                    <div className="text-sm text-gray-900">{qa.question}</div>
-                                                </td>
-                                                <td className="w-2/6 px-4 py-4">
-                                                    <div className="text-sm text-gray-900">{qa.context}</div>
-                                                </td>
-                                                <td className="w-2/6 px-4 py-4">
-                                                    <div className="text-sm text-gray-900">{qa.answer}</div>
-                                                </td>
-                                            </tr>
-                                        )
-                                    })}
 
                                     {/* 실시간 QA */}
                                     <tr>
@@ -102,6 +87,21 @@ export const FullDemo: React.FC = () => {
                                             <button onClick={() => post_qa(new_question)} className="px-2 py-1 bg-gray-100 hover:bg-gray-200 border border-gray-300 text-sm">질문하기</button>
                                         </td>
                                     </tr>
+                                    {qa_array.map((qa, idx) => {
+                                        return (
+                                            <tr key={idx}>
+                                                <td className="w-1/6 px-4 py-4">
+                                                    <div className="text-sm text-gray-900">{qa.question}</div>
+                                                </td>
+                                                <td className="w-2/6 px-4 py-4">
+                                                    <div className="text-sm text-gray-900">{qa.context}</div>
+                                                </td>
+                                                <td className="w-2/6 px-4 py-4">
+                                                    <div className="text-sm text-gray-900">{qa.answer}</div>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })}
 
                                 </tbody>
                             </table>
