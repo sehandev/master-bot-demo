@@ -17,8 +17,6 @@ services:
     stdin_open: true
     command: >
       bash -c "pip install -r requirements.txt
-      && python build_qa_data.py --model mbert
-      && python build_qa_data.py --model koelectra
       && opyrator launch-api app:question_answering"
   front:
     image: node:16-slim

@@ -36,7 +36,7 @@ export const Sidebar: React.FC<Props> = ({ children, model_name }) => {
                     </div>
                 </Link>
 
-                <div className="flex items-center justify-center mb-4">
+                {/* <div className="flex items-center justify-center mb-4">
                     <label
                         htmlFor="toogleA"
                         className="flex items-center cursor-pointer"
@@ -55,7 +55,7 @@ export const Sidebar: React.FC<Props> = ({ children, model_name }) => {
                         </div>
                     </label>
 
-                </div>
+                </div> */}
 
                 <ul className="space-y-2 text-sm">
                     {titles.map((title) => {
