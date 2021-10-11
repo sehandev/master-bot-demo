@@ -1,5 +1,7 @@
 # I-Manual Masterbot Demo
 
+<img src="https://github.com/sehandev/masterbot-demo/blob/main/example.png?raw=true" width="1024" />
+
 ## Launch QA API
 
 QA api server 실행
