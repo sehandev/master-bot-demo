@@ -4,7 +4,6 @@ from pathlib import Path
 
 # PIP
 from pydantic import BaseModel, Field
-from transformers import pipeline
 from opyrator.components import outputs
 
 # Custom

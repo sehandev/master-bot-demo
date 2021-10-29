@@ -11,6 +11,8 @@ interface QnA {
 
 export const FullDemo: React.FC = () => {
     const [new_question, set_new_question] = useState('')
+    const [new_question_2, set_new_question_2] = useState('')
+    const [new_context, set_new_context] = useState('')
     const [qa_array, set_qa_array] = useState<QnA[]>([])
 
     useEffect(() => {
@@ -42,6 +44,29 @@ export const FullDemo: React.FC = () => {
         set_new_question('')
     }
 
+    const post_qa_with_context = (question: string, context: string) => {
+        const json = JSON.stringify({
+            model_name: "mbert",
+            context: context,
+            question: question,
+        })
+
+        axios.post('http://223.194.70.78:8126/call', json, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        }).then((response: AxiosResponse) => {
+            const answer = response.data[0].label
+            const context = response.data[1].label
+            set_qa_array(oldArray => [{ question: question, context: context, answer: answer }, ...oldArray])
+        }).catch(function (error) {
+            console.log(error)
+        })
+
+        set_new_question_2('')
+        set_new_context('')
+    }
+
     return (
         <div className="mx-auto p-4">
             <div className="flex mb-4 text-lg font-bold text-center">마스터봇 전체 QA</div>
@@ -65,6 +90,40 @@ export const FullDemo: React.FC = () => {
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
+
+                                    {/* 실시간 QA with Context */}
+                                    <tr>
+                                        <td className="w-1/6 px-4 py-4">
+                                            <input
+                                                type="text"
+                                                value={new_question_2}
+                                                onChange={(e) => set_new_question_2(e.target.value)}
+                                                onKeyPress={(e) => {
+                                                    if (e.key == 'Enter') {
+                                                        post_qa(new_question_2)
+                                                    }
+                                                }}
+                                                className="mr-2 px-2 py-2 border border-grey-700 rounded-md"
+                                                placeholder="추가 질문"
+                                            />
+                                        </td>
+                                        <td className="w-2/6 px-4 py-4">
+                                            <input
+                                                type="text"
+                                                value={new_context}
+                                                onChange={(e) => set_new_context(e.target.value)}
+                                                onKeyPress={(e) => {
+                                                    if (e.key == 'Enter') {
+                                                        post_qa_with_context(new_question_2, new_context)
+                                                    }
+                                                }}
+                                                className="mr-2 px-2 py-2 border border-grey-700 rounded-md"
+                                                placeholder="추가 지문"
+                                            /></td>
+                                        <td className="w-2/6 px-4 py-4">
+                                            <button onClick={() => post_qa_with_context(new_question_2, new_context)} className="px-2 py-1 bg-gray-100 hover:bg-gray-200 border border-gray-300 text-sm">질문하기</button>
+                                        </td>
+                                    </tr>
 
                                     {/* 실시간 QA */}
                                     <tr>
